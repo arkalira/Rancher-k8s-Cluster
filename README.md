@@ -5,6 +5,7 @@ Lets configure a Kubernetes cluster with three nodes DEBIAN 9.4 and on top of it
 ## Prerequisites
 
 - 3 nodes Debian 9.4 with full network visibility between them.
+- 1 FW or HAPROXY to make SSL Offloading with and interface in the same subnet as the 3 nodes.
 - Basic installation of: wget, curl, etc
 
 ```
@@ -55,7 +56,7 @@ docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8
 
 #### Access to Rancher
 
-- In your browser: http://localhost:8080
+- In your browser: http://localhost:8080 or set rancher.ironshared.com to public IP of the firewall or HAProxy that you put in front of Rancher.
 
 Click in Infrastructure - Host - Custom and then put labels and add the same host where you are running Rancher.
 
@@ -69,4 +70,4 @@ sudo docker run -e CATTLE_AGENT_IP="10.200.1.10"  -e CATTLE_HOST_LABELS='hostnam
 
 - There is some kind of bug with CATTLE_URL: https://github.com/rancher/rancher/issues/12028
 
-- As we dont hace DNS valid resolution to generate true SSL Certs, we would like to test it via HTTP, but CATTLE_URL is not accepted to be set as an environment variable at this moment.
+- As we dont have a valid DNS resolution to generate true SSL Certs, we would like to test it via HTTP, but CATTLE_URL is not accepted to be set as an environment variable at this moment.
