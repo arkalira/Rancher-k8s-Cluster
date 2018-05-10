@@ -49,7 +49,7 @@ apt-get install -y docker-ce=17.03.2~ce-0~debian-stretch
 
 ```
 mkdir -p /opt/mysql-rancher
-docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8080:8080 rancher/server
+docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8080:8080 rancher/rancher:latest
 ```
 
 - See more launching methods here: https://rancher.com/docs/rancher/v1.6/en/installing-rancher/installing-server/#single-container-bind-mount
