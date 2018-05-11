@@ -60,7 +60,7 @@ docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8
 
 #### Add a Host to Rancher
 
-Click in **Infrastructure - Host - Custom** and then put as many labels as you need and add the same host where you are running Rancher.
+- Click in **Infrastructure - Host - Custom** and then put as many labels as you need and add the same host where you are running Rancher.
 
 This will generate a script to register the new host:
 
