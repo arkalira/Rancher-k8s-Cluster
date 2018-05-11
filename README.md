@@ -58,7 +58,7 @@ docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8
 
 - In your browser: http://localhost:8080 or set rancher.ironshared.com to the public IP of the firewall or HAProxy that you put in front of Rancher in your etc/hosts or local DNS.
 
-### Add a Host to Rancher
+**Add a Host to Rancher**
 
 - Click **Infrastructure - Host - Custom** and then put as many labels as you need and add the same host where you are running Rancher.
 
