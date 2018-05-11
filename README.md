@@ -48,8 +48,9 @@ apt-get install -y docker-ce=17.03.2~ce-0~debian-stretch
 ### Launching with a single container and a bind mount MySQL Volume
 
 ```
-mkdir -p /opt/mysql-rancher
-docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8080:8080 rancher/rancher:latest
+mkdir -p /opt/mysql-rancher \
+docker run -d -v /opt/mysql-rancher:/var/lib/mysql \
+--restart=unless-stopped -p 8080:8080 rancher/rancher:latest \
 ```
 
 - See more launching methods here: https://rancher.com/docs/rancher/v1.6/en/installing-rancher/installing-server/#single-container-bind-mount
@@ -65,7 +66,9 @@ docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8
 - This will generate a script to register the new host:
 
 ```
-docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.0.0 --server https://10.200.1.10 --token 55ckhhsj9bdlckzzw7jchhdbtdwms45lnwm4644q9r7vlpzn6vvm88 --ca-checksum 2acbc5767bf3cdba8f5d42f547ba403bffd908d4df6b8a938793f3e9d699eb37 --internal-address 10.200.1.11 --etcd --controlplane --worker --label cluster=ironshared-staging --label env=staging --label hostname=rancher202
+docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes \ -v /var/run:/var/run rancher/rancher-agent:v2.0.0 --server https://10.200.1.10  \
+--token 55ckhhsj9bdlckzzw7jchhdbtdwms45lnwm4644q9r7vlpzn6vvm88 \
+--ca-checksum 2acbc5767bf3cdba8f5d42f547ba403bffd908d4df6b8a938793f3e9d699eb37 \ --internal-address 10.200.1.11 --etcd --controlplane --worker --label \ cluster=ironshared-staging --label env=staging --label hostname=rancher202
 ```
 
 **IMPORTANT:** be sure that https://10.200.1.10 is correctly accessed by the host before executing this line. Once this is launched, it will pull Rancher Agent and install in the designated server.
