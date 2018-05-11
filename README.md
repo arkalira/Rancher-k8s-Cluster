@@ -5,6 +5,7 @@ Lets configure a Kubernetes cluster with three nodes DEBIAN 9.4 and on top of it
 ## Prerequisites
 
 - 3 nodes Debian 9.4 with full network visibility between them.
+- 1 FW or HAPROXY to make SSL Offloading with and interface in the same subnet as the 3 nodes.
 - Basic installation of: wget, curl, etc
 
 ```
@@ -40,33 +41,31 @@ add-apt-repository \
 apt-get update && apt-cache madison docker-ce
 apt-get install -y docker-ce=17.03.2~ce-0~debian-stretch
 ```
-## Execute rancher
+## Launch Rancher 2.0
 
 - This method is not recommended for PRODUCTION ENVIRONMENTS.
 
-### Launch Rancher with a single container and a bind mount MySQL Volume
+### Launching with a single container and a bind mount MySQL Volume
 
 ```
 mkdir -p /opt/mysql-rancher
-docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8080:8080 rancher/server
+docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8080:8080 rancher/rancher:latest
 ```
 
 - See more launching methods here: https://rancher.com/docs/rancher/v1.6/en/installing-rancher/installing-server/#single-container-bind-mount
 
-#### Access to Rancher
+### Access to Rancher
 
-- In your browser: http://localhost:8080
+- In your browser: http://localhost:8080 or set rancher.ironshared.com to the public IP of the firewall or HAProxy that you put in front of Rancher in your etc/hosts or local DNS.
 
-Click in Infrastructure - Host - Custom and then put labels and add the same host where you are running Rancher.
+### Add a Host to Rancher
 
-This will be generate a script to register the host:
+- Click **Infrastructure - Host - Custom** and then put as many labels as you need and add the same host where you are running Rancher.
+
+This will generate a script to register the new host:
 
 ```
-sudo docker run -e CATTLE_AGENT_IP="10.200.1.10"  -e CATTLE_HOST_LABELS='hostname=rancher201' -e CATTLE_URL='http://rancher.ironshared.com/v1'  --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/rancher:/var/lib/rancher rancher/agent:v1.2.10-rc5 http://rancher.ironshared.com/v1/scripts/4D5A8637A59D1FBA9FE5:1514678400000:WQ2rkACuz6TIlStbXbpEQtJtB4
+docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.0.0 --server https://10.200.1.10 --token 55ckhhsj9bdlckzzw7jchhdbtdwms45lnwm4644q9r7vlpzn6vvm88 --ca-checksum 2acbc5767bf3cdba8f5d42f547ba403bffd908d4df6b8a938793f3e9d699eb37 --internal-address 10.200.1.11 --etcd --controlplane --worker --label cluster=ironshared-staging --label env=staging --label hostname=rancher202
 ```
 
-- Please, be sure that rancher.ironshared.com is correctly resolved by the host before executing this line. Once this is launched, it will pull Rancher Agent and install in this server.
-
-- There is some kind of bug with CATTLE_URL: https://github.com/rancher/rancher/issues/12028
-
-- As we dont hace DNS valid resolution to generate true SSL Certs, we would like to test it via HTTP, but CATTLE_URL is not accepted to be set as an environment variable at this moment.
+**IMPORTANT:** be sure that https://10.200.1.10 is correctly accessed by the host before executing this line. Once this is launched, it will pull Rancher Agent and install in the designated server.
