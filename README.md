@@ -62,7 +62,7 @@ docker run -d -v /opt/mysql-rancher:/var/lib/mysql --restart=unless-stopped -p 8
 
 - Click **Infrastructure - Host - Custom** and then put as many labels as you need and add the same host where you are running Rancher.
 
-This will generate a script to register the new host:
+- This will generate a script to register the new host:
 
 ```
 docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.0.0 --server https://10.200.1.10 --token 55ckhhsj9bdlckzzw7jchhdbtdwms45lnwm4644q9r7vlpzn6vvm88 --ca-checksum 2acbc5767bf3cdba8f5d42f547ba403bffd908d4df6b8a938793f3e9d699eb37 --internal-address 10.200.1.11 --etcd --controlplane --worker --label cluster=ironshared-staging --label env=staging --label hostname=rancher202
